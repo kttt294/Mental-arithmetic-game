@@ -29,4 +29,3 @@ Mã nguồn được tổ chức thành 3 phần chính:
   - Nếu trả lời đúng: Hiển thị thông báo thành công và tự động chuyển câu hỏi sau 2 giây.
   - Nếu trả lời sai: Hiển thị đáp án đúng và yêu cầu người dùng nhấn nút "Tiếp" để tiếp tục.
 - **Không giới hạn**: Trò chơi diễn ra vô tận cho đến khi người dùng chọn dừng lại.
--
