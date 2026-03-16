@@ -1,6 +1,6 @@
 # Mental Math Game - Trò Chơi Tính Nhẩm
 
-Chào mừng bạn đến với **Mental Math Game**, một ứng dụng web đơn giản giúp bạn rèn luyện khả năng tính nhẩm với giao diện hiện đại và bắt mắt.
+Chào mừng bạn đến với **Mental Math Game**, một ứng dụng web đơn giản giúp bạn rèn luyện khả năng tính nhẩm.
 
 ## Cách khởi động
 
