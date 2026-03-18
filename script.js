@@ -150,6 +150,5 @@ document.addEventListener('DOMContentLoaded', () => {
         landingScreen.classList.add('active');
     });
 
-    // Proactive focus on start
     startBtn.focus();
 });
