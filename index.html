@@ -21,7 +21,10 @@
         <div id="landing-screen" class="screen active">
             <h1 class="glitch-text">Mental Math</h1>
             <p class="subtitle">Thử thách trí tuệ với các phép tính nhanh</p>
-            <button id="start-btn" class="glass-btn pulse">Bắt đầu ngay</button>
+            <div style="display: flex; gap: 1.5rem; justify-content: center; margin-bottom: 2rem;">
+                <button id="start-easy-btn" class="glass-btn">Mức Dễ</button>
+                <button id="start-hard-btn" class="glass-btn secondary">Mức Khó</button>
+            </div>
         </div>
 
         <!-- Game Screen -->
@@ -34,6 +37,10 @@
                 <div class="stat-item">
                     <span class="label">Tổng:</span>
                     <span id="total-count" class="value">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="label">Kỷ lục:</span>
+                    <span id="highscore-count" class="value">0</span>
                 </div>
             </div>
 

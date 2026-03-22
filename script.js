@@ -4,7 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameScreen = document.getElementById('game-screen');
 
     // Buttons
-    const startBtn = document.getElementById('start-btn');
+    const startEasyBtn = document.getElementById('start-easy-btn');
+    const startHardBtn = document.getElementById('start-hard-btn');
     const nextBtn = document.getElementById('next-btn');
     const exitBtn = document.getElementById('exit-btn');
 
@@ -15,11 +16,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const correctDisplay = document.getElementById('correct-answer-display');
     const scoreEl = document.getElementById('score-count');
     const totalEl = document.getElementById('total-count');
+    const highScoreEl = document.getElementById('highscore-count');
 
     let currentProblem = null;
     let score = 0;
     let total = 0;
     let isWaiting = false;
+    let difficulty = 'hard';
+    let highScore = localStorage.getItem('mentalMathHighScore') || 0;
+    
+    highScoreEl.textContent = highScore;
 
     // --- Math Generation logic ---
 
@@ -40,40 +46,56 @@ document.addEventListener('DOMContentLoaded', () => {
 
         switch (op) {
             case '+':
-                a = generateDigits(getRandomInt(1, 4));
-                b = generateDigits(getRandomInt(1, 4));
+                if (difficulty === 'easy') {
+                    a = generateDigits(getRandomInt(1, 2));
+                    b = generateDigits(getRandomInt(1, 2));
+                } else {
+                    a = generateDigits(getRandomInt(1, 4));
+                    b = generateDigits(getRandomInt(1, 4));
+                }
                 result = a + b;
                 equationStr = `${a} + ${b}`;
                 break;
             case '-':
-                a = generateDigits(getRandomInt(1, 4));
-                b = generateDigits(getRandomInt(1, 4));
-                // Ensure positive result for simplicity, or just allow negative
+                if (difficulty === 'easy') {
+                    a = generateDigits(getRandomInt(1, 2));
+                    b = generateDigits(getRandomInt(1, 2));
+                } else {
+                    a = generateDigits(getRandomInt(1, 4));
+                    b = generateDigits(getRandomInt(1, 4));
+                }
+                // Ensure positive result for simplicity
                 if (a < b) [a, b] = [b, a];
                 result = a - b;
                 equationStr = `${a} - ${b}`;
                 break;
             case '*':
-                // 1-3 digits, but not both 3 digits
-                const d1 = getRandomInt(1, 3);
-                const d2 = (d1 === 3) ? getRandomInt(1, 2) : getRandomInt(1, 3);
-                a = generateDigits(d1);
-                b = generateDigits(d2);
+                if (difficulty === 'easy') {
+                    a = generateDigits(1);
+                    b = generateDigits(2);
+                    if (Math.random() > 0.5) [a, b] = [b, a];
+                } else {
+                    const d1 = getRandomInt(1, 3);
+                    const d2 = (d1 === 3) ? getRandomInt(1, 2) : getRandomInt(1, 3);
+                    a = generateDigits(d1);
+                    b = generateDigits(d2);
+                }
                 result = a * b;
                 equationStr = `${a} × ${b}`;
                 break;
             case '/':
-                // Dividend 2-5 digits, Divisor 1-2 digits
-                // Better approach: Generate divisor and result, then multiply to get dividend
-                const divisorDigits = getRandomInt(1, 2);
-                b = generateDigits(divisorDigits);
-                
-                // We want a * b (dividend) to be 10 - 99999
-                // so a (result) should be between 10/b and 99999/b
-                const minResult = Math.ceil(10 / b);
-                const maxResult = Math.floor(99999 / b);
-                a = getRandomInt(Math.max(1, minResult), maxResult);
-                
+                if (difficulty === 'easy') {
+                    b = generateDigits(1); // divisor 1 digit
+                    const minResult = Math.ceil(10 / b);
+                    const maxResult = Math.floor(99 / b); // dividend max 99
+                    a = getRandomInt(Math.max(1, minResult), maxResult);
+                } else {
+                    const divisorDigits = getRandomInt(1, 2);
+                    b = generateDigits(divisorDigits);
+                    const minResult = Math.ceil(10 / b);
+                    const maxResult = Math.floor(99999 / b);
+                    a = getRandomInt(Math.max(1, minResult), maxResult);
+                }
                 const dividend = a * b;
                 result = a;
                 equationStr = `${dividend} ÷ ${b}`;
@@ -85,7 +107,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Game Flow ---
 
-    function startGame() {
+    function startGame(level) {
+        difficulty = level;
         score = 0;
         total = 0;
         updateStats();
@@ -117,6 +140,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (userAnswer === currentProblem.answer) {
             score++;
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('mentalMathHighScore', highScore);
+                highScoreEl.textContent = highScore;
+            }
             feedbackMsg.textContent = 'Chính xác!';
             feedbackMsg.className = 'feedback-msg feedback-success';
             setTimeout(newQuestion, 2000);
@@ -137,7 +165,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Events ---
 
-    startBtn.addEventListener('click', startGame);
+    startEasyBtn.addEventListener('click', () => startGame('easy'));
+    startHardBtn.addEventListener('click', () => startGame('hard'));
 
     answerInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') handleSubmission();
@@ -150,5 +179,5 @@ document.addEventListener('DOMContentLoaded', () => {
         landingScreen.classList.add('active');
     });
 
-    startBtn.focus();
+    startEasyBtn.focus();
 });
