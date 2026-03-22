@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const scoreEl = document.getElementById('score-count');
     const totalEl = document.getElementById('total-count');
     const highScoreEl = document.getElementById('highscore-count');
-
+ 
     let currentProblem = null;
     let score = 0;
     let total = 0;
